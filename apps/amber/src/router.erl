@@ -35,6 +35,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 start_node(MID, Conf) ->
+  io:format("Starting server~n"),
+  error_logger:error_msg("Starting server~n"),
   gen_server:start_link({local, router}, ?MODULE, {MID, Conf}, []).
 
 receive_msg(_MID, #routing_msg{}) -> %% TODO: wiadomość do routera??
@@ -77,13 +79,18 @@ unpack_msg(<<HdrB_Len:2/big-unsigned-integer-unit:8, MsgRest/binary>>) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 init({MID, Conf}) ->
+  io:format("Initializing server~n"),
+  error_logger:error_msg("Initializing server~n"),
   {ok, #state{mid = MID, conf = Conf}}.
 
 handle_call(_, _, State) ->
+  io:format("Handle-call in server~n"),
+  error_logger:error_msg("Handle-call in server~n"),
   {noreply, State}.
 
 handle_cast({send_msg, Sender, #driverhdr{devicetype = DevT, deviceid = DevI}, Msg}, State)
   when is_integer(DevT), is_integer(DevI) ->
+  io:format("Handle-cast in server~n"),
 
   % od klienta do drivera %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
